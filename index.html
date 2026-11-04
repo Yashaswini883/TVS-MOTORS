@@ -114,13 +114,12 @@ footer.site{padding:44px 24px 30px;border-top:1px solid var(--line)}
 .footer-copy{font-size:12px;color:var(--muted);margin-top:30px}
 
 /* Glow button */
-@property --glow-a{syntax:'<angle>';initial-value:0deg;inherits:false}
-#glowBtn{position:fixed;right:0;bottom:0;width:326px;height:101px;z-index:998;border-radius:30px;pointer-events:none}
-#glowBtn::before,#glowBtn::after{content:"";position:absolute;border-radius:inherit;background:conic-gradient(from var(--glow-a),#FF7A1A,#FFC46B,#FFFFFF,#7CC4FF,#3B5BDB,#FF7A1A);animation:glowSpin 4s linear infinite}
-#glowBtn::before{inset:-2px;filter:blur(12px);opacity:.55;z-index:-1;animation:glowSpin 4s linear infinite,glowBreath 3s ease-in-out infinite}
+@property --glow-c{syntax:'<color>';initial-value:#FF7A1A;inherits:false}
+#glowBtn{position:fixed;right:1px;bottom:1px;width:252px;height:100px;z-index:998;border-radius:40px;pointer-events:none;animation:glowColor 5s ease-in-out infinite}
+#glowBtn::before,#glowBtn::after{content:"";position:absolute;border-radius:inherit;background:var(--glow-c)}
+#glowBtn::before{inset:-2px;filter:blur(12px);opacity:.55;z-index:-1}
 #glowBtn::after{inset:0;padding:3px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
-@keyframes glowSpin{to{--glow-a:360deg}}
-@keyframes glowBreath{0%,100%{opacity:.4}50%{opacity:.7}}
+@keyframes glowColor{0%,100%{--glow-c:#FF7A1A}50%{--glow-c:#1F3C88}}
 @media(max-width:900px){
   header.top,.subnav,.hero,.parts-section,.blogs,footer.site{padding-left:24px;padding-right:24px}
   .service-tabs{margin-left:24px;margin-right:24px}
