@@ -114,9 +114,9 @@ footer.site{padding:44px 24px 30px;border-top:1px solid var(--line)}
 .footer-copy{font-size:12px;color:var(--muted);margin-top:30px}
 
 /* Glow button */
-#glowBtn{position:fixed;bottom:24px;right:24px;z-index:999;width:240px;height:64px;padding:0;border-radius:999px;border:2px solid #fff;cursor:pointer;background:linear-gradient(120deg,#032D60,#FF7A00,#FFFFFF,#FF7A00,#032D60);background-size:300% 100%;animation:glowShift 4s linear infinite,glowPulse 3s ease-in-out infinite}
+#glowBtn{position:fixed;right:20px;bottom:6px;width:348px;height:123px;z-index:998;border-radius:40px;border:3px solid #fff;pointer-events:none;background:linear-gradient(120deg,#032D60,#FF7A00,#FFFFFF,#FF7A00,#032D60);background-size:300% 100%;animation:glowShift 4s linear infinite,glowPulse 3s ease-in-out infinite}
 @keyframes glowShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 18px 4px rgba(255,122,0,.75),0 0 40px 10px rgba(255,122,0,.3),inset 0 0 22px 6px rgba(255,255,255,.55)}33%{box-shadow:0 0 18px 4px rgba(255,255,255,.95),0 0 40px 10px rgba(3,45,96,.35),inset 0 0 22px 6px rgba(255,122,0,.6)}66%{box-shadow:0 0 18px 4px rgba(3,45,96,.85),0 0 40px 10px rgba(3,45,96,.3),inset 0 0 22px 6px rgba(255,255,255,.6)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 24px 6px rgba(255,122,0,.8),0 0 60px 16px rgba(255,122,0,.35),inset 0 0 28px 8px rgba(255,255,255,.6)}33%{box-shadow:0 0 24px 6px rgba(255,255,255,.95),0 0 60px 16px rgba(3,45,96,.4),inset 0 0 28px 8px rgba(255,122,0,.65)}66%{box-shadow:0 0 24px 6px rgba(3,45,96,.9),0 0 60px 16px rgba(3,45,96,.35),inset 0 0 28px 8px rgba(255,255,255,.65)}}
 
 @media(max-width:900px){
   header.top,.subnav,.hero,.parts-section,.blogs,footer.site{padding-left:24px;padding-right:24px}
@@ -344,6 +344,30 @@ const Chat = (() => {
 </script>
 <script type='text/javascript' src='https://pr1789623421200.my.site.com/ESWTVSMOTORS1793421819769/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
+<script>
+/* Keeps the glow frame centred behind the Agentforce button */
+(function(){
+  var PAD=22, glow=document.getElementById('glowBtn');
+  function target(){return document.getElementById('embeddedMessagingConversationButton')||document.querySelector('.embeddedMessagingConversationButton')}
+  function sync(){
+    var t=target();
+    if(!t){return}
+    var r=t.getBoundingClientRect(), cs=getComputedStyle(t);
+    if(cs.display==='none'||cs.visibility==='hidden'||r.width===0){glow.style.display='none';return}
+    glow.style.display='block';
+    glow.style.left=(r.left-PAD)+'px';
+    glow.style.top=(r.top-PAD)+'px';
+    glow.style.right='auto';glow.style.bottom='auto';
+    glow.style.width=(r.width+PAD*2)+'px';
+    glow.style.height=(r.height+PAD*2)+'px';
+    var rad=parseFloat(cs.borderTopLeftRadius)||20;
+    glow.style.borderRadius=(rad+PAD)+'px';
+  }
+  setInterval(sync,200);
+  window.addEventListener('resize',sync);
+  window.addEventListener('load',sync);
+})();
+</script>
 </body>
 
 </html>
