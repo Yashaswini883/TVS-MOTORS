@@ -12,7 +12,7 @@
   --sf-blue-deep:#032D60; --sf-blue-light:#1B96FF;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',-apple-system,sans-serif;color:var(--ink);font-size:15px;line-height:1.5;background:#fff}
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--ink);font-size:1px;line-height:1.;background:#fff}
 a{text-decoration:none;color:inherit}
 img{display:block;max-width:100%}
 
@@ -115,7 +115,7 @@ footer.site{padding:44px 24px 30px;border-top:1px solid var(--line)}
 
 /* Glow button */
 @property --glow-c{syntax:'<color>';initial-value:#FF7A1A;inherits:false}
-#glowBtn{position:fixed;right:1px;bottom:1px;width:252px;height:100px;z-index:998;border-radius:40px;pointer-events:none;animation:glowColor 5s ease-in-out infinite}
+#glowBtn{position:fixed;right:1px;bottom:1px;width:252px;height:100px;z-index:998;border-radius:40px;pointer-events:none;animation:glowColor 1s ease-in-out infinite}
 #glowBtn::before,#glowBtn::after{content:"";position:absolute;border-radius:inherit;background:var(--glow-c)}
 #glowBtn::before{inset:-2px;filter:blur(12px);opacity:.55;z-index:-1}
 #glowBtn::after{inset:0;padding:3px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
