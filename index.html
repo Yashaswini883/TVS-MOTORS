@@ -114,10 +114,12 @@ footer.site{padding:44px 24px 30px;border-top:1px solid var(--line)}
 .footer-copy{font-size:12px;color:var(--muted);margin-top:30px}
 
 /* Glow button */
-#glowBtn{position:fixed;right:20px;bottom:6px;width:348px;height:123px;z-index:998;border-radius:40px;border:3px solid #fff;pointer-events:none;background:linear-gradient(120deg,#032D60,#FF7A00,#FFFFFF,#FF7A00,#032D60);background-size:300% 100%;animation:glowShift 4s linear infinite,glowPulse 3s ease-in-out infinite}
-@keyframes glowShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 24px 6px rgba(255,122,0,.8),0 0 60px 16px rgba(255,122,0,.35),inset 0 0 28px 8px rgba(255,255,255,.6)}33%{box-shadow:0 0 24px 6px rgba(255,255,255,.95),0 0 60px 16px rgba(3,45,96,.4),inset 0 0 28px 8px rgba(255,122,0,.65)}66%{box-shadow:0 0 24px 6px rgba(3,45,96,.9),0 0 60px 16px rgba(3,45,96,.35),inset 0 0 28px 8px rgba(255,255,255,.65)}}
-
+@property --glow-a{syntax:'<angle>';initial-value:0deg;inherits:false}
+#glowBtn{position:fixed;right:20px;bottom:22px;width:330px;height:104px;z-index:998;border-radius:34px;pointer-events:none}
+#glowBtn::before,#glowBtn::after{content:"";position:absolute;border-radius:inherit;background:conic-gradient(from var(--glow-a),#FF7A00,#FFFFFF,#032D60,#FF7A00);animation:glowSpin 3.5s linear infinite}
+#glowBtn::before{inset:-4px;filter:blur(14px);opacity:.55;z-index:-1}
+#glowBtn::after{inset:0;padding:4px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+@keyframes glowSpin{to{--glow-a:360deg}}
 @media(max-width:900px){
   header.top,.subnav,.hero,.parts-section,.blogs,footer.site{padding-left:24px;padding-right:24px}
   .service-tabs{margin-left:24px;margin-right:24px}
@@ -345,23 +347,37 @@ const Chat = (() => {
 <script type='text/javascript' src='https://pr1789623421200.my.site.com/ESWTVSMOTORS1793421819769/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
 <script>
-/* Keeps the glow frame centred behind the Agentforce button */
+/* Keeps the glow ring aligned around the Agentforce "Ask Me Anything" button */
 (function(){
-  var PAD=22, glow=document.getElementById('glowBtn');
-  function target(){return document.getElementById('embeddedMessagingConversationButton')||document.querySelector('.embeddedMessagingConversationButton')}
+  var PAD=10, glow=document.getElementById('glowBtn'), pill=null;
+  function alpha(c){var m=c.match(/rgba?\(([^)]+)\)/);if(!m)return 0;var p=m[1].split(',');return p.length>3?parseFloat(p[3]):1}
+  function usable(e){
+    if(!e||!e.isConnected)return false;
+    var r=e.getBoundingClientRect(),cs=getComputedStyle(e);
+    return cs.display!=='none'&&cs.visibility!=='hidden'&&r.width>60&&r.height>30;
+  }
+  function findPill(){
+    var tw=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),n;
+    while((n=tw.nextNode())){
+      if(/ask me anything/i.test(n.nodeValue)){
+        for(var e=n.parentElement;e&&e!==document.body;e=e.parentElement){
+          var cs=getComputedStyle(e);
+          if(alpha(cs.backgroundColor)>0.5&&parseFloat(cs.borderTopLeftRadius)>0&&usable(e))return e;
+        }
+      }
+    }
+    return null;
+  }
   function sync(){
-    var t=target();
-    if(!t){return}
-    var r=t.getBoundingClientRect(), cs=getComputedStyle(t);
-    if(cs.display==='none'||cs.visibility==='hidden'||r.width===0){glow.style.display='none';return}
-    glow.style.display='block';
-    glow.style.left=(r.left-PAD)+'px';
-    glow.style.top=(r.top-PAD)+'px';
+    if(!usable(pill))pill=findPill();
+    var host=document.getElementById('embeddedMessagingConversationButton')||document.querySelector('.embeddedMessagingConversationButton');
+    var t=usable(pill)?pill:host;
+    if(!usable(t)){return} /* not loaded yet: keep the CSS fallback position */
+    var r=t.getBoundingClientRect(),cs=getComputedStyle(t);
+    glow.style.left=(r.left-PAD)+'px';glow.style.top=(r.top-PAD)+'px';
     glow.style.right='auto';glow.style.bottom='auto';
-    glow.style.width=(r.width+PAD*2)+'px';
-    glow.style.height=(r.height+PAD*2)+'px';
-    var rad=parseFloat(cs.borderTopLeftRadius)||20;
-    glow.style.borderRadius=(rad+PAD)+'px';
+    glow.style.width=(r.width+PAD*2)+'px';glow.style.height=(r.height+PAD*2)+'px';
+    glow.style.borderRadius=((parseFloat(cs.borderTopLeftRadius)||20)+PAD)+'px';
   }
   setInterval(sync,200);
   window.addEventListener('resize',sync);
