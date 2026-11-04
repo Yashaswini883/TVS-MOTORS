@@ -115,7 +115,7 @@ footer.site{padding:44px 24px 30px;border-top:1px solid var(--line)}
 
 /* Glow button */
 @property --glow-a{syntax:'<angle>';initial-value:0deg;inherits:false}
-#glowBtn{position:fixed;right:30px;bottom:18px;width:326px;height:101px;z-index:998;border-radius:30px;pointer-events:none}
+#glowBtn{position:fixed;right:0;bottom:0;width:326px;height:101px;z-index:998;border-radius:30px;pointer-events:none}
 #glowBtn::before,#glowBtn::after{content:"";position:absolute;border-radius:inherit;background:conic-gradient(from var(--glow-a),#FF7A1A,#FFC46B,#FFFFFF,#7CC4FF,#3B5BDB,#FF7A1A);animation:glowSpin 4s linear infinite}
 #glowBtn::before{inset:-2px;filter:blur(12px);opacity:.55;z-index:-1;animation:glowSpin 4s linear infinite,glowBreath 3s ease-in-out infinite}
 #glowBtn::after{inset:0;padding:3px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
@@ -347,53 +347,6 @@ const Chat = (() => {
 </script>
 <script type='text/javascript' src='https://pr1789623421200.my.site.com/ESWTVSMOTORS1793421819769/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-<script>
-/* Keeps the glow ring aligned around the Agentforce "Ask Me Anything" button */
-(function(){
-  var PAD=8, glow=document.getElementById('glowBtn'), pill=null, tick=0;
-  function alpha(c){var m=c.match(/rgba?\(([^)]+)\)/);if(!m)return 0;var p=m[1].split(',');return p.length>3?parseFloat(p[3]):1}
-  function up(e){var p=e.parentNode;return p&&p.host?p.host:e.parentElement}
-  function okPill(e){
-    if(!e||!e.isConnected||e===document.body||e===document.documentElement)return false;
-    var r=e.getBoundingClientRect(),cs=getComputedStyle(e);
-    return cs.display!=='none'&&cs.visibility!=='hidden'&&r.width>60&&r.width<=420&&r.height>30&&r.height<=140;
-  }
-  function looksLikePill(e){var cs=getComputedStyle(e);return okPill(e)&&alpha(cs.backgroundColor)>0.5&&parseFloat(cs.borderTopLeftRadius)>0}
-  function climb(el){for(var e=el;e;e=up(e)){if(e.nodeType===1&&looksLikePill(e))return e}return null}
-  function all(root,out){var n=root.querySelectorAll('*');for(var i=0;i<n.length;i++){out.push(n[i]);if(n[i].shadowRoot)all(n[i].shadowRoot,out)}return out}
-  /* 1) find by the button's text (also looks inside shadow DOM) */
-  function byText(){
-    var els=all(document,[]);
-    for(var i=0;i<els.length;i++){
-      var e=els[i];
-      if(e.id==='glowBtn'||e.children.length>0)continue;
-      if(/ask me anything/i.test(e.textContent||'')){var p=climb(e);if(p)return p}
-    }
-    return null;
-  }
-  /* 2) find by what is actually on screen where the button normally sits */
-  function byPoint(){
-    var x=innerWidth-38-155,y=innerHeight-26-42,el=document.elementFromPoint(x,y);
-    while(el&&el.shadowRoot){var i=el.shadowRoot.elementFromPoint(x,y);if(!i||i===el)break;el=i}
-    if(!el)return null;
-    var inSF=(el.closest&&el.closest('[id*="mbedded"],[class*="mbedded"]'))||(el.getRootNode&&el.getRootNode().host);
-    return inSF?climb(el):null;
-  }
-  function sync(){
-    tick++;
-    if(!okPill(pill)){ if(tick%5!==1&&pill===null)return; pill=byText()||byPoint(); }
-    if(!pill)return; /* not found: keep the default position in the CSS */
-    var r=pill.getBoundingClientRect(),cs=getComputedStyle(pill);
-    glow.style.left=(r.left-PAD)+'px';glow.style.top=(r.top-PAD)+'px';
-    glow.style.right='auto';glow.style.bottom='auto';
-    glow.style.width=(r.width+PAD*2)+'px';glow.style.height=(r.height+PAD*2)+'px';
-    glow.style.borderRadius=((parseFloat(cs.borderTopLeftRadius)||20)+PAD)+'px';
-  }
-  setInterval(function(){pill=okPill(pill)?pill:null;sync()},200);
-  window.addEventListener('resize',function(){pill=null;sync()});
-  window.addEventListener('load',sync);
-})();
-</script>
 </body>
 
 </html>
